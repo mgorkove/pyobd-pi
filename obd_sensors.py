@@ -40,7 +40,7 @@ def intake_m_pres(code): # in kPa
   
 def rpm(code):
     code = hex_to_int(code)
-    return code / 4
+    return code / 4.0
 
 def speed(code):
     code = hex_to_int(code)
@@ -56,12 +56,12 @@ def timing_advance(code):
 
 def sec_to_min(code):
     code = hex_to_int(code)
-    return code / 60
+    return code / 60.0
 
 def temp(code):
     code = hex_to_int(code)
     c = code - 40 
-    return 32 + (9 * c / 5) 
+    return c
 
 def cpass(code):
     #fixme
@@ -70,7 +70,7 @@ def cpass(code):
 def fuel_trim_percent(code):
     code = hex_to_int(code)
     #return (code - 128.0) * 100.0 / 128
-    return (code - 128) * 100 / 128
+    return (code - 128) * 100.0 / 128
 
 def dtc_decrypt(code):
     #first byte is byte after PID and without spaces
@@ -141,35 +141,39 @@ SENSORS = [
     Sensor("dtc_status"            , "S-S DTC Cleared"				, "0101" , dtc_decrypt      ,""       ),    
     Sensor("dtc_ff"                , "DTC C-F-F"					, "0102" , cpass            ,""       ),      
     Sensor("fuel_status"           , "Fuel System Stat"				, "0103" , cpass            ,""       ),
-    Sensor("load"                  , "Calc Load Value"				, "01041", percent_scale    ,""       ),    
-    Sensor("temp"                  , "Coolant Temp"					, "0105" , temp             ,"F"      ),
-    Sensor("short_term_fuel_trim_1", "S-T Fuel Trim"				, "0106" , fuel_trim_percent,"%"      ),
-    Sensor("long_term_fuel_trim_1" , "L-T Fuel Trim"				, "0107" , fuel_trim_percent,"%"      ),
-    Sensor("short_term_fuel_trim_2", "S-T Fuel Trim"				, "0108" , fuel_trim_percent,"%"      ),
-    Sensor("long_term_fuel_trim_2" , "L-T Fuel Trim"				, "0109" , fuel_trim_percent,"%"      ),
+    Sensor("load"                  , "Calc Load Value"				, "0104", percent_scale    ,""       ),    
+    Sensor("temp"                  , "Coolant Temp"					, "0105" , temp             ,""      ),
+    Sensor("short_term_fuel_trim_1", "S-T Fuel Trim"				, "0106" , fuel_trim_percent,""      ),
+    Sensor("long_term_fuel_trim_1" , "L-T Fuel Trim"				, "0107" , fuel_trim_percent,""      ),
+    Sensor("short_term_fuel_trim_2", "S-T Fuel Trim"				, "0108" , fuel_trim_percent,""      ),
+    Sensor("long_term_fuel_trim_2" , "L-T Fuel Trim"				, "0109" , fuel_trim_percent,""      ),
     Sensor("fuel_pressure"         , "FuelRail Pressure"			, "010A" , cpass            ,""       ),
-    Sensor("manifold_pressure"     , "Intk Manifold"				, "010B" , intake_m_pres    ,"psi"    ),
-    Sensor("rpm"                   , "Engine RPM"					, "010C1", rpm              ,""       ),
-    Sensor("speed"                 , "Vehicle Speed"				, "010D1", speed            ,"MPH"    ),
-    Sensor("timing_advance"        , "Timing Advance"				, "010E" , timing_advance   ,"degrees"),
-    Sensor("intake_air_temp"       , "Intake Air Temp"				, "010F" , temp             ,"F"      ),
-    Sensor("maf"                   , "AirFlow Rate(MAF)"			, "0110" , maf              ,"lb/min" ),
-    Sensor("throttle_pos"          , "Throttle Position"			, "01111", throttle_pos     ,"%"      ),
+    Sensor("manifold_pressure"     , "Intk Manifold"				, "010B" , intake_m_pres    ,""    ),
+    Sensor("rpm"                   , "Engine RPM"					, "010C", rpm              ,""       ),
+    Sensor("speed"                 , "Vehicle Speed"				, "010D", speed            ,""    ),
+    Sensor("timing_advance"        , "Timing Advance"				, "010E" , timing_advance   ,""),
+    Sensor("intake_air_temp"       , "Intake Air Temp"				, "010F" , temp             ,""      ),
+    Sensor("maf"                   , "AirFlow Rate(MAF)"			, "0110" , maf              ,"" ),
+    Sensor("throttle_pos"          , "Throttle Position"			, "0111", throttle_pos     ,""      ),
     Sensor("secondary_air_status"  , "2nd Air Status"				, "0112" , cpass            ,""       ),
     Sensor("o2_sensor_positions"   , "Loc of O2 sensors"			, "0113" , cpass            ,""       ),
-    Sensor("o211"                  , "O2 Sensor: 1 - 1"				, "0114" , fuel_trim_percent,"%"      ),
-    Sensor("o212"                  , "O2 Sensor: 1 - 2"				, "0115" , fuel_trim_percent,"%"      ),
-    Sensor("o213"                  , "O2 Sensor: 1 - 3"				, "0116" , fuel_trim_percent,"%"      ),
-    Sensor("o214"                  , "O2 Sensor: 1 - 4"				, "0117" , fuel_trim_percent,"%"      ),
-    Sensor("o221"                  , "O2 Sensor: 2 - 1"				, "0118" , fuel_trim_percent,"%"      ),
-    Sensor("o222"                  , "O2 Sensor: 2 - 2"				, "0119" , fuel_trim_percent,"%"      ),
-    Sensor("o223"                  , "O2 Sensor: 2 - 3"				, "011A" , fuel_trim_percent,"%"      ),
-    Sensor("o224"                  , "O2 Sensor: 2 - 4"				, "011B" , fuel_trim_percent,"%"      ),
+    Sensor("o211"                  , "O2 Sensor: 1 - 1"				, "0114" , fuel_trim_percent,""      ),
+    Sensor("o212"                  , "O2 Sensor: 1 - 2"				, "0115" , fuel_trim_percent,""      ),
+    Sensor("o213"                  , "O2 Sensor: 1 - 3"				, "0116" , fuel_trim_percent,""      ),
+    Sensor("o214"                  , "O2 Sensor: 1 - 4"				, "0117" , fuel_trim_percent,""      ),
+    Sensor("o221"                  , "O2 Sensor: 2 - 1"				, "0118" , fuel_trim_percent,""      ),
+    Sensor("o222"                  , "O2 Sensor: 2 - 2"				, "0119" , fuel_trim_percent,""      ),
+    Sensor("o223"                  , "O2 Sensor: 2 - 3"				, "011A" , fuel_trim_percent,""      ),
+    Sensor("o224"                  , "O2 Sensor: 2 - 4"				, "011B" , fuel_trim_percent,""      ),
     Sensor("obd_standard"          , "OBD Designation"				, "011C" , cpass            ,""       ),
     Sensor("o2_sensor_position_b"  , "Loc of O2 sensor" 			, "011D" , cpass            ,""       ),
     Sensor("aux_input"             , "Aux input status"				, "011E" , cpass            ,""       ),
-    Sensor("engine_time"           , "Engine Start MIN"				, "011F" , sec_to_min       ,"min"    ),
-    Sensor("engine_mil_time"       , "Engine Run MIL"				, "014D" , sec_to_min       ,"min"    ),
+    Sensor("engine_time"           , "Engine Start MIN"				, "011F" , sec_to_min       ,""    ),
+    Sensor(""       , "Distance traveled with malfunction indicator lamp (MIL) on"               , "0121" , None,""    ),
+    Sensor(""       , "Fuel Rail Pressure (relative to manifold vacuum)"               , "0122" , None,""    ),
+    Sensor(""       , "Fuel Rail Gauge Pressure (diesel, or gasoline direct injection)"               , "0122" , None,""    ),
+    Sensor("engine_mil_time"       , "Engine Run MIL"				, "014D" , sec_to_min       ,""    ),
+
     ]
      
     

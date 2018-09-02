@@ -203,16 +203,17 @@ class OBDPort:
          return None
 
      # get sensor value from command
-     def get_sensor_value(self,sensor):
+     def get_sensor_value(self,cmd):
          """Internal use only: not a public interface"""
-         cmd = sensor.cmd
+         #cmd = sensor.cmd
          self.send_command(cmd)
          data = self.get_result()
          
          if data:
              data = self.interpret_result(data)
-             if data != "NODATA":
-                 data = sensor.value(data)
+             if data == "NODATA":
+                return "NORESPONSE"
+                 #data = sensor.value(data)
          else:
              return "NORESPONSE"
              
