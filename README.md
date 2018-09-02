@@ -1,7 +1,28 @@
 pyobd
 =====
 
-<pre>OBD-Pi: Raspberry Pi Displaying Car Diagnostics (OBD-II) Data On An Aftermarket Head Unit
+<pre>
+-----------
+To run on the raspberry pi, download the repo from the write-to-csv branch. Then, cd into the folder that has requirements.txt.
+Then, do the following commands:
+
+sudo apt-get install python-pip
+pip install -r requirements.txt
+
+To run the data collection script, do 
+
+python obd_recorder.py
+
+to run with the default arguments, or
+
+python obd_recorder.py -o <output_filename> -s <sampling_interval>
+
+where output_filename is the path to where the file with the data will be stored (ex. "/data/all_data.csv")
+and sampling_interval is the interval in seconds at which data will be collected. Ex. a sampling interval of 
+1 means that it'll record data every second, 0.5 means every half second, etc
+
+-----------
+OBD-Pi: Raspberry Pi Displaying Car Diagnostics (OBD-II) Data On An Aftermarket Head Unit
 
 In this tutorial you will learn how to connect your Raspberry Pi to a Bluetooth OBD-II adapter and display realtime engine data to your cars aftermarket head unit.
 
